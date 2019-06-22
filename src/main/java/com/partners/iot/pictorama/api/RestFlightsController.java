@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @RestController
@@ -61,6 +62,7 @@ public class RestFlightsController {
 
         }
     }
+
     @RequestMapping(value = "/tourist/{touristId}/flight/{flightId}", method = RequestMethod.DELETE)
     void deleteFlightFromTourist(@PathVariable Long flightId, @PathVariable Long touristId) {
         Optional<Tourist> tourist = touristRepository.findById(touristId);
@@ -69,7 +71,7 @@ public class RestFlightsController {
             Tourist touristUnwrapped = tourist.get();
             Optional<Flight> flight = flightRepository.findById(flightId);
             if (flight.isPresent()) {
-                touristUnwrapped.deleteFlight(flight.orElse(null));
+                touristUnwrapped.removeFlight(flight.orElse(null));
                 touristRepository.saveAndFlush(touristUnwrapped);
             }
 
@@ -85,7 +87,6 @@ public class RestFlightsController {
     void addFlight(@RequestBody Flight flight) {
         flightRepository.save(flight);
     }
-
 
 
     @RequestMapping(value = "/flight/{flightId}", method = RequestMethod.DELETE)
@@ -124,7 +125,7 @@ public class RestFlightsController {
             Flight flightUnwrapped = flight.get();
             Optional<Tourist> tourist = touristRepository.findById(touristId);
             if (tourist.isPresent()) {
-                flightUnwrapped.deleteTourist(tourist.orElse(null));
+                flightUnwrapped.removeTourist(tourist.orElse(null));
                 flightRepository.saveAndFlush(flightUnwrapped);
             }
 
