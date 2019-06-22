@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <!-- Basic Page Needs
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta charset="utf-8">
+    <title>Assignment</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Mobile Specific Metas
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- FONT
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link href="https://fonts.googleapis.com/css?family=Raleway&display=swap" rel="stylesheet">
+
+    <!-- CSS
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/stylesheet.css">
+
+    <link rel="stylesheet" type="text/css" href="niceCountryInput.css">
+
+
+
+
+
+    <!-- Favicon
+    –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+
+    <script src="script.js"></script>
+    <script src="niceCountryInput.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+
+</head>
+<body>
+
+
+<!-- Primary Page Layout
+–––––––––––––––––––––––––––––––––––––––––––––––––– -->
+
+<div class="container">
+    <section class="header">
+        <h2>REST SpaceFlights 🚀</h2>
+    </section>
+
+    <hr>
+
+    <button onclick="displayTable()" class="tourist-table button button-primary">Tourist Table</button>
+    <button onclick="displayForm()" class="tourist-form button">Add Tourist</button>
+    <button onclick="displayBox()" class="tourist-box button button-primary">Delete tourist</button>
+
+    <button onclick="displayFlightTable()" class="flight-table button">Flight Table</button>
+    <button onclick="displayFlightForm()" class="flight-form button button-primary">Add flight</button>
+    <button onclick="displayFlightBox()" class="flight-box button">Delete flight</button>
+
+    <hr>
+
+    <div id="tourist_container">
+        <h5>List of tourists &#129312</h5>
+        <table id="dataTable" class="u-full-width"></table>
+    </div>
+    <div id="tourist_form">
+        <h5>➕ Add new tourist</h5>
+        <form  id="form" onsubmit='return onSubmit()' >
+            <input style="width: 300px;" name='name' placeholder='name'><br>
+            <input style="width: 300px;" name='surname' placeholder='surname'><br>
+            <select style="width: 150px;" name ="sex">
+                <option value="F">Female</option>
+                <option value="M">Male</option>
+            </select><br>
+            <div id="testinput" style="width: 300px;" data-selectedcountry="PL" data-showspecial="false"
+                 data-showflags="true" data-i18nall="All selected" data-i18nnofilter="No selection"
+                 data-i18nfilter="Filter" data-onchangecallback="onChangeCallback" >
+            </div>
+
+            <script>
+                function onChangeCallback(ctr){
+                    console.log("The country was changed: " + ctr);
+                }
+                $(document).ready(function () {
+                    new NiceCountryInput($("#testinput")).init();
+                });
+            </script><br>
+            <input style="width: 300px;" name='notes' placeholder='notes'><br>
+            <input style="width: 300px;" type="date" name='birthDate' ><br>
+            <button type='submit'>Add</button>
+        </form>
+    </div>
+    <div id ="tourist_box">
+        <h6>Delete tourist by id</h6>
+        <input id="tourist_deleteById" placeholder='ID'><br>
+        <button onclick="deleteTourist()" >Try</button>
+    </div>
+
+    <div id="flight_container">
+        <h5>List of flights ✈️</h5>
+        <table id="flight_dataTable"></table>
+    </div>
+
+    <div id="flight_form" >
+        <h5>➕ Add new flight</h5>
+        <form  id="forms" onsubmit='return onFlightSubmit()' >
+            <input type="date" name='departureTime' ><br>
+            <input type="date" name='arrivalTime' ><br>
+            <input name='capacity' placeholder='capacity'><br>
+            <input name='ticketPrice' placeholder='ticketPrice'><br>
+            <button type='submit'>Add</button>
+        </form>
+    </div>
+    <div id ="flight_box">
+        <h6>Delete flight by id</h6>
+        <input id="flight_deleteById" placeholder='ID'><br>
+        <button onclick="deleteFlight()" >Try</button>
+    </div>
+</div>
+
+<!-- End Document
+  –––––––––––––––––––––––––––––––––––––––––––––––––– -->
+</body>
+</html>
