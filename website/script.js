@@ -202,7 +202,7 @@ function myFunction(arr, elementId) {
                 out += "<td class='smallerTd'>" + '<button onclick=\"deleteTouristFromFlight(' + arr[i]["id"] + "," + q + ')\"></button>' + "</td>";
                 q++;
                 out += "<td class='smallerTd'>" + "<select class='touristsList'></select></td>";
-                out += "<td class='smallerTd'>" + '<button onclick=\"addTouristToFlight(' + arr[i]["id"] + "," + i + ')\"></button>' + "</td>" + "</td>";
+                out += "<td class='smallerTd'>" + '<button onclick=\"addTouristToFlight(' + arr[i]["id"] + "," + i + "," + arr[i]["capacity"]+ ')\"></button>' + "</td>" + "</td>";
                 out += "<td class='smallerTd'>";
             }
             if (elementId === "dataTable") {
@@ -421,10 +421,31 @@ function deleteTouristFromFlight(id, list_index) {
     location.reload();
 }
 
-function addFlightToTourist(id, list_index) {
-   //var xhr = getHttpRequest();
-    var value = document.getElementsByClassName("flightsList")[list_index].value;
 
+function addFlightToTourist(id, list_index)
+{
+    var value = document.getElementsByClassName("flightsList")[list_index].value;
+    var req = getHttpRequest();
+    req.open('GET', "http://localhost:8080/flights/" + value, true);
+    req.onload = function () {
+        if (req.readyState === 4 && req.status === 200) {
+            var bool =  JSON.parse(req.responseText);
+            if(bool)
+            {
+                addF(id,list_index,value);
+            }
+            else
+            {
+                alert("No empty seats");
+            }
+
+        }
+    };
+    req.send(null);
+}
+function addF(id, list_index, value) {
+   //var xhr = getHttpRequest();
+    //var value = document.getElementsByClassName("flightsList")[list_index].value;
     var flights = document.getElementsByClassName("flights")[list_index];
     if (flights) {
         for (var i = 0; i < flights.length; i++) {
@@ -439,6 +460,7 @@ function addFlightToTourist(id, list_index) {
     /*xhr.open("PUT", url, true);
     xhr.send(null);*/
 
+
     axios.put(url, {withCredentials: true});
 
     location.reload();
@@ -446,7 +468,7 @@ function addFlightToTourist(id, list_index) {
 
 }
 
-function addTouristToFlight(id, list_index) {
+function addTouristToFlight(id, list_index,capacity) {
    // var xhr = getHttpRequest();
     var value = document.getElementsByClassName("touristsList")[list_index].value;
 
@@ -454,17 +476,24 @@ function addTouristToFlight(id, list_index) {
     if (tourists) {
         for (var i = 0; i < tourists.length; i++) {
             if (tourists.options[i].value === value) {
-                alert("Tourist is already in flight");
+                alert("Tourist is already in flights tourists");
                 return false;
             }
         }
     }
-    //  addFlightToTouristById(value,id)
     var url = "http://localhost:8080/flight" + "/" + id + "/" + "tourist" + "/" + value;
-  /*  xhr.open("PUT", url, true);
-    xhr.send(null);*/
 
-    axios.put(url, {withCredentials: true});
+
+
+
+    if(tourists.length <capacity)
+    {
+        axios.put(url, {withCredentials: true});
+    }
+    else
+    {
+        alert("No empty seats");
+    }
 
     location.reload();
 
