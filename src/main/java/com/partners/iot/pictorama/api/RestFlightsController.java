@@ -94,6 +94,12 @@ public class RestFlightsController {
         flightRepository.delete(flightId);
     }
 
+    @RequestMapping(value = "/flights/{flightId}", method = RequestMethod.GET)
+    Boolean isEmptySit(@PathVariable Long flightId) {
+        return (Objects.requireNonNull(flightRepository.findById(flightId).orElse(null))).capacity > (Objects.requireNonNull(flightRepository.findById(flightId).orElse(null))).getTourists().size();
+
+    }
+
     @RequestMapping(value = "/flight/{flightId}/tourist/{touristId}", method = RequestMethod.PUT)
     void editFlight(@PathVariable Long touristId, @PathVariable Long flightId) {
         Optional<Flight> flight = flightRepository.findById(flightId);
